@@ -1,0 +1,26 @@
+{
+  "name": "bamazon-customer",
+  "version": "1.0.0",
+  "description": "store like amazon database using node",
+  "main": "bamazoncustomer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dryguy99/Bamazon.git"
+  },
+  "author": "timothy dry",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dryguy99/Bamazon/issues"
+  },
+  "homepage": "https://github.com/dryguy99/Bamazon#readme",
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "express": "^4.15.2",
+    "inquirer": "^3.0.6",
+    "mysql": "^2.13.0",
+    "node-sqlparser": "^1.0.2"
+  }
+}
