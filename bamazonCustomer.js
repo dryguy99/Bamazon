@@ -98,8 +98,8 @@ function listItems(){
 							}
 						}
 						).then (function(bidInfo){
-							console.log("INSERT cart(item_id, product_name, department_name, price, quanity_req, user_name) VALUES(" + aItem.id+ ",'" + aItem.name +"','" + aItem.department + "'," + aItem.price +"," + aItem.quanity + ",'" + userN + "'');");
-							connection.query("INSERT cart(item_id, product_name, department_name, price, quanity_req, user_name) VALUES(" + aItem.id+ ",'" + aItem.name +"','" + aItem.department + "'," + aItem.price +"," + aItem.quanity + ",'" + userN + "');",
+							console.log("INSERT cart(item_id, product_name, department_name, price, quanity_req, user_name) VALUES(" + aItemHashMap[answer.cart].id + ",'" + aItemHashMap[answer.cart].name +"','" + aItemHashMap[answer.cart].department + "'," + aItemHashMap[answer.cart].price +"," + aItemHashMap[answer.cart].quanity + ",'" + userN + "'');");
+							connection.query("INSERT cart(item_id, product_name, department_name, price, quanity_req, user_name) VALUES(" + aItemHashMap[answer.cart].id+ ",'" + aItemHashMap[answer.cart].name +"','" + aItemHashMap[answer.cart].department + "'," + aItemHashMap[answer.cart].price +"," + aItemHashMap[answer.cart].quanity + ",'" + userN + "');",
 								function (error, results, fields){
 									if (error) {
 										console.log("insert error :");
@@ -107,7 +107,7 @@ function listItems(){
 									} else { 
 										console.log(results);
 										console.log("Success!")
-										checkOut(myItem, userN);}
+										checkOut(myItem, quan, userN);}
 								
 							// add to cart and call checkout
 							//in theory, we can chain these bids until the user does not
@@ -124,21 +124,22 @@ function listItems(){
 }
 
 
-function checkOut (myItem, userN) {
+function checkOut (myItem, quan, userN) {
+	console.log(myItem);
 	connection.query ("SELECT * FROM cart WHERE item_id = " + myItem+ ";", 
 		function (error, results, fields){
 			if (error) {
 				console.log(error);
 			}
-			console.log(results);
-			var total = results.price * results.quanity_req;
+			console.log(results[0]);
+			var total = results[0].price * quan;
 			console.log('');
-			console.log("Your Shopping Cart has " + results.quanity_req + " of " + results.product_name + ".");
+			console.log("Your Shopping Cart has " + quan + " of " + results[0].product_name + ".");
 			console.log('');
 			console.log('Your Subtotal is : ' + total);
 			console.log('');
 			var tax = 0.00;
-			if (results.department_name === "clothing") {
+			if (results[0].department_name == "Clothing") {
 				tax = Math.round10((total * 0.6875), -2);
 				console.log("Your Tax is " + tax + " .");
 			} else { console.log("There is no tax on clothing.")}
@@ -150,7 +151,7 @@ function checkOut (myItem, userN) {
 				, choices: ["YES","NO"]
 				}).then(function(answer){
 		//we take our answer and direct the flow of the program into other functions
-		if (answer.user === "YES") {
+		if (answer.user == "Yes") {
 			console.log("");
 			console.log("Your card has been charged. Purchase Complete.");
 		}
@@ -246,6 +247,12 @@ function startBamazon(){
 
 
 function start(){
+	connection.query ("TRUNCATE cart;", 
+		function (error, results, fields){
+			if (error) {
+				console.log(error);
+			}
+		});
 	console.log("");
 	console.log("Welcome!");
 	console.log("");
